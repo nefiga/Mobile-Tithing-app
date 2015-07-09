@@ -1,0 +1,6 @@
+<resources>
+    <color name="ColorPrimary">#2196F3</color>
+    <color name="ColorPrimaryDark">#0D47A1</color>
+    <color name="ColorPrimaryLight">#42A5F5</color>
+    <color name="tabsScrollColor">#F44336</color>
+</resources>

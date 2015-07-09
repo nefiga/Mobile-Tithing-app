@@ -3,7 +3,9 @@ package personal.com.tithingapp.database;
 public class IncomeTable extends TableBuilder {
 
     public static final String TABLE_NAME = begin("income");
-    public static final String TOTAL = end("total", DB_INTEGER);
+    public static final String TITLE = appendText("title");
+    public static final String DATE = appendText("date");
+    public static final String AMOUNT = end("amount", DB_INTEGER);
 
     public static final String CREATE = retrieveCreateString();
 

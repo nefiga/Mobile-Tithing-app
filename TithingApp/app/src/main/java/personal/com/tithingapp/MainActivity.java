@@ -1,57 +1,78 @@
 package personal.com.tithingapp;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Currency;
+import personal.com.tithingapp.views.SlidingTabLayout;
+import personal.com.tithingapp.views.ViewPagerAdapter;
 
-import personal.com.tithingapp.database.IncomeTable;
-import personal.com.tithingapp.database.Provider;
+/**
+ * A simple launcher activity containing a summary sample description, sample log and a custom
+ * {@link android.support.v4.app.Fragment} which can display a view.
+ * <p/>
+ * For devices with displays with a width of 720dp or greater, the sample log is always visible,
+ * on other devices it's visibility is controlled by an item on the Action Bar.
+ */
+public class MainActivity extends AppCompatActivity {
 
-
-public class MainActivity extends ActionBarActivity {
+    private Toolbar mToolBar;
+    ViewPager mPager;
+    ViewPagerAdapter mAdapter;
+    SlidingTabLayout mTabs;
+    CharSequence mTitles[]={"TITHING","INCOME"};
+    int mNumboftabs =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolBar);
+
+        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        mAdapter =  new ViewPagerAdapter(getSupportFragmentManager(),mTitles,mNumboftabs);
+
+        // Assigning ViewPager View and setting the adapter
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
+
+        // Assiging the Sliding Tab Layout View
+        mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        mTabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        mTabs.setViewPager(mPager);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(IncomeTable.TOTAL, 124);
-        getContentResolver().insert(Provider.INCOME_CONTENT_URI, contentValues);
-
-        Cursor cursor = getContentResolver().query(Provider.INCOME_CONTENT_URI, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            float total = cursor.getFloat(cursor.getColumnIndex(IncomeTable.TOTAL));
-            Log.i("MainActivity", "Total: " + total);
-        } else {
-            Log.i("MainActivity", "Error getting income data");
-        }
         return true;
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
