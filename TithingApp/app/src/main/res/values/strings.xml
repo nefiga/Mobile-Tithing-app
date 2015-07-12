@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TithingApp</string>
     <string name="action_settings">Settings</string>
+
+    <!--Tabs-->
+    <string name="tithing_tab_title">TITHING</string>
+    <string name="income_tab_title">INCOME</string>
 </resources>

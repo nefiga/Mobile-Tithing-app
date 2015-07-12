@@ -62,10 +62,10 @@ public class Provider extends ContentProvider{
         final SQLiteDatabase databaseConnection = mDatabase.getWritableDatabase();
 
         switch (URI_MATCHER.match(uri)) {
-            case INCOME_DIR:
+            case INCOME_ID:
                 queryBuilder.appendWhere(IncomeTable.ID + "=" + uri.getPathSegments().get(1));
                 break;
-            case INCOME_ID:
+            case INCOME_DIR:
                 queryBuilder.setTables(IncomeTable.TABLE_NAME);
                 break;
             default:

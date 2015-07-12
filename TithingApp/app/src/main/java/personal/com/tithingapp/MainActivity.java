@@ -19,42 +19,35 @@ import personal.com.tithingapp.views.ViewPagerAdapter;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mToolBar;
     ViewPager mPager;
-    ViewPagerAdapter mAdapter;
-    SlidingTabLayout mTabs;
-    CharSequence mTitles[]={"TITHING","INCOME"};
-    int mNumboftabs =2;
+    ViewPagerAdapter mViewPagerAdapter;
+    SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolBar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(mToolBar);
+        setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        mAdapter =  new ViewPagerAdapter(getSupportFragmentManager(),mTitles,mNumboftabs);
+        mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
+        mViewPagerAdapter.addFragment(new IncomeTab().setTitle(getResources().getString(R.string.income_tab_title)));
 
-        // Assigning ViewPager View and setting the adapter
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(mAdapter);
+        mPager.setAdapter(mViewPagerAdapter);
 
-        // Assiging the Sliding Tab Layout View
-        mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        mTabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        mSlidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
                 return getResources().getColor(R.color.tabsScrollColor);
             }
         });
 
-        // Setting the ViewPager For the SlidingTabsLayout
-        mTabs.setViewPager(mPager);
+        mSlidingTabLayout.setViewPager(mPager);
     }
 
     @Override
