@@ -5,4 +5,8 @@
     <!--Tabs-->
     <string name="tithing_tab_title">TITHING</string>
     <string name="income_tab_title">INCOME</string>
+
+    <!--Views-->
+    <string name="date_title">DATE:</string>
+    <string name="amount_title">AMOUNT:</string>
 </resources>

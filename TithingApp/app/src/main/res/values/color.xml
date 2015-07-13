@@ -3,4 +3,5 @@
     <color name="ColorPrimaryDark">#0D47A1</color>
     <color name="ColorPrimaryLight">#42A5F5</color>
     <color name="tabsScrollColor">#F44336</color>
+    <color name="text_hint">#A4A4A4</color>
 </resources>
