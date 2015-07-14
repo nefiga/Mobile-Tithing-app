@@ -9,4 +9,5 @@
     <!--Views-->
     <string name="date_title">DATE:</string>
     <string name="amount_title">AMOUNT:</string>
+    <string name="paid">PAID</string>
 </resources>

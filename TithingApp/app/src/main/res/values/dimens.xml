@@ -12,4 +12,10 @@
     <dimen name="horizontal_page_margin">@dimen/margin_medium</dimen>
     <dimen name="vertical_page_margin">@dimen/margin_medium</dimen>
 
+    <!--Text Sizes-->
+    <dimen name="small_text">10dp</dimen>
+    <dimen name="medium_text">15dp</dimen>
+    <dimen name="large_text">20dp</dimen>
+    <dimen name="extra_large_text">25dp</dimen>
+
 </resources>

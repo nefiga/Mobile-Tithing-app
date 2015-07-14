@@ -1,5 +1,6 @@
 package personal.com.tithingapp;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,16 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import personal.com.tithingapp.database.IncomeTable;
+import personal.com.tithingapp.database.Provider;
 import personal.com.tithingapp.views.SlidingTabLayout;
 import personal.com.tithingapp.views.ViewPagerAdapter;
 
-/**
- * A simple launcher activity containing a summary sample description, sample log and a custom
- * {@link android.support.v4.app.Fragment} which can display a view.
- * <p/>
- * For devices with displays with a width of 720dp or greater, the sample log is always visible,
- * on other devices it's visibility is controlled by an item on the Action Bar.
- */
 public class MainActivity extends AppCompatActivity {
 
     ViewPager mPager;
