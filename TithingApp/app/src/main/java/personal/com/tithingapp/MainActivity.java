@@ -1,15 +1,11 @@
 package personal.com.tithingapp;
 
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import personal.com.tithingapp.database.IncomeTable;
-import personal.com.tithingapp.database.Provider;
 import personal.com.tithingapp.views.SlidingTabLayout;
 import personal.com.tithingapp.views.ViewPagerAdapter;
 
@@ -28,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
-        mViewPagerAdapter.addFragment(new IncomeTab().setTitle(getResources().getString(R.string.income_tab_title)));
+        mViewPagerAdapter.addFragment(new IncomeListTab().setTitle(getResources().getString(R.string.income_tab_title)));
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mViewPagerAdapter);

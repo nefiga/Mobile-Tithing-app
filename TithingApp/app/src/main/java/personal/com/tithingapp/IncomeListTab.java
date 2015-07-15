@@ -15,8 +15,8 @@ import personal.com.tithingapp.utilities.IncomeListAdapter;
 import personal.com.tithingapp.utilities.TabFragment;
 import personal.com.tithingapp.utilities.Utils;
 
-public class IncomeTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
+public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    //TODO Need to set up touch listener for RecyclerView
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.income_list, container, false);
 

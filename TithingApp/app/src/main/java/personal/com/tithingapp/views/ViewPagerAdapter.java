@@ -1,12 +1,11 @@
 package personal.com.tithingapp.views;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import personal.com.tithingapp.utilities.TabFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -33,5 +32,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     public void addFragment(TabFragment fragment) {
         mFragments.add(fragment);
+    }
+
+    public void replaceParent(TabFragment parent, TabFragment child) {
+        mFragments.set(mFragments.indexOf(parent), child);
+        notifyDataSetChanged();
     }
 }

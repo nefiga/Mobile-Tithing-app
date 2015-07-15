@@ -10,6 +10,7 @@ public class TabFragment extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
 
     private CharSequence mTitle;
+    private int mPosition;
 
     public CharSequence getTitle() {
         return mTitle;
@@ -19,5 +20,13 @@ public class TabFragment extends Fragment {
         mTitle = title;
 
         return this;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
+    public int getPosition() {
+        return mPosition;
     }
 }
