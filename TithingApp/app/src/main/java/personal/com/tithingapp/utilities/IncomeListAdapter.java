@@ -2,7 +2,6 @@ package personal.com.tithingapp.utilities;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,36 +9,44 @@ import android.widget.TextView;
 
 import personal.com.tithingapp.R;
 import personal.com.tithingapp.database.IncomeTable;
+import personal.com.tithingapp.utilities.ViewHolder.ViewHolderOnClickListener;
 
-public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeListAdapter.ViewHolder> {
+public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeListAdapter.IncomeViewHolder> {
 
-    public IncomeListAdapter(Context context, Cursor cursor) {
+    private ViewHolderOnClickListener mViewClickedListener;
+
+    public IncomeListAdapter(Context context, Cursor cursor, ViewHolderOnClickListener clickedListener) {
         super(context, cursor);
+        mViewClickedListener = clickedListener;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(IncomeViewHolder viewHolder, Cursor cursor) {
         viewHolder.mTitle.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
         viewHolder.mDate.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE)));
         viewHolder.mAmount.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.AMOUNT)));
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public IncomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.income_list_view, parent, false);
+
         TextView title = (TextView) itemView.findViewById(R.id.title);
         TextView date = (TextView) itemView.findViewById(R.id.date);
         TextView amount = (TextView) itemView.findViewById(R.id.amount);
-        return new ViewHolder(itemView, title, date, amount);
+
+        IncomeViewHolder viewHolder = new IncomeViewHolder(itemView, title, date, amount);
+        viewHolder.setOnClickListener(mViewClickedListener);
+
+        return viewHolder;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
+    public class IncomeViewHolder extends ViewHolder {
         TextView mTitle;
         TextView mDate;
         TextView mAmount;
 
-        public ViewHolder(View itemView, TextView title, TextView date, TextView amount) {
+        public IncomeViewHolder(View itemView, TextView title, TextView date, TextView amount) {
             super(itemView);
             mTitle = title;
             mDate = date;

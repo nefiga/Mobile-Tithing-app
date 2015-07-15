@@ -14,9 +14,10 @@ import personal.com.tithingapp.database.Provider;
 import personal.com.tithingapp.utilities.IncomeListAdapter;
 import personal.com.tithingapp.utilities.TabFragment;
 import personal.com.tithingapp.utilities.Utils;
+import personal.com.tithingapp.utilities.ViewHolder;
 
-public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    //TODO Need to set up touch listener for RecyclerView
+public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewHolder.ViewHolderOnClickListener {
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.income_list, container, false);
 
@@ -26,7 +27,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new IncomeListAdapter(getActivity(), null);
+        mAdapter = new IncomeListAdapter(getActivity(), null, this);
         mRecyclerView.setAdapter(mAdapter);
 
         getLoaderManager().initLoader(Utils.INCOME_LOADER, null, this);
@@ -49,6 +50,11 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onClick(View view, int position) {
 
     }
 }
