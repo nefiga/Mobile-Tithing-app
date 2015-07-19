@@ -10,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import personal.com.tithingapp.IncomeListAdapter.OnListItemClickListener;
 import personal.com.tithingapp.database.Provider;
-import personal.com.tithingapp.utilities.IncomeListAdapter;
-import personal.com.tithingapp.utilities.TabFragment;
 import personal.com.tithingapp.utilities.Utils;
-import personal.com.tithingapp.utilities.ViewHolder;
 
-public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewHolder.ViewHolderOnClickListener {
+public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnListItemClickListener{
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.income_list, container, false);
@@ -30,6 +28,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         mAdapter = new IncomeListAdapter(getActivity(), null, this);
         mAdapter.enableFooter();
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(mAdapter);
 
         getLoaderManager().initLoader(Utils.INCOME_LOADER, null, this);
         return v;
@@ -56,6 +55,5 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onClick(View view, int position) {
-
     }
 }

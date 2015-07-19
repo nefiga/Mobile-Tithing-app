@@ -7,9 +7,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import personal.com.tithingapp.utilities.TabFragment;
+import personal.com.tithingapp.TabFragment;
+import personal.com.tithingapp.TabFragment.ChangeTabListener;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter implements ChangeTabListener{
     private List<TabFragment> mFragments = new ArrayList<>();
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {

@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import personal.com.tithingapp.utilities.TabFragment;
-
 public class TithingTab extends TabFragment {
 
     @Override
