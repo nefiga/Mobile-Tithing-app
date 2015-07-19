@@ -4,8 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
 
-public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder>  extends RecyclerView.Adapter<VH> {
+public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
+    private final int FOOTER_COUNT = 1;
+    private final int NO_ITEMS = 0;
+
+    public static final int HEADER_VIEW_TYPE = 0;
+    public static final int NORMAL_VIEW_TYPE = 1;
+    public static final int FOOTER_VIEW_TYPE = 2;
 
     private Context mContext;
 
@@ -16,6 +23,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     private int mRowIdColumn;
 
     private DataSetObserver mDataSetObserver;
+
+    private boolean mDisplayFooter;
 
     public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
         mContext = context;
@@ -33,10 +42,14 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        if (mDataValid && mCursor != null)
-            return mCursor.getCount();
+        if (mDataValid && mCursor != null) {
+            if (mDisplayFooter)
+                return mCursor.getCount() + FOOTER_COUNT;
 
-        return 0;
+            return mCursor.getCount();
+        }
+
+        return NO_ITEMS;
     }
 
     @Override
@@ -44,7 +57,15 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         if (mDataValid && mCursor != null && mCursor.moveToPosition(position))
             return mCursor.getLong(mRowIdColumn);
 
-        return 0;
+        return RecyclerView.NO_ID;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mCursor != null && position >= mCursor.getCount())
+            return FOOTER_VIEW_TYPE;
+
+        return NORMAL_VIEW_TYPE;
     }
 
     @Override
@@ -53,18 +74,37 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == FOOTER_VIEW_TYPE)
+            return onCreateFooter(parent);
+
+        return onCreateNormalViewHolder(parent);
+    }
+
+    public abstract VH onCreateNormalViewHolder(ViewGroup parent);
+
+    public abstract VH onCreateFooter(ViewGroup parent);
+
+    @Override
     public void onBindViewHolder(VH holder, int position) {
         if (!mDataValid)
             throw new IllegalStateException("This should only be called when the cursor is valid");
 
-        if (!mCursor.moveToPosition(position))
+        if (!mCursor.moveToPosition(position) && !mDisplayFooter && position != mCursor.getCount())
             throw new IllegalStateException("Couldn't move cursor to position " + position);
 
-        onBindViewHolder(holder, mCursor);
+        if (position < mCursor.getCount())
+            onBindViewHolder(holder, mCursor);
+        else
+            onBindFooter(holder);
+    }
+
+    public void enableFooter() {
+        mDisplayFooter = true;
     }
 
     public void changeCursor(Cursor cursor) {
-        Cursor old  = swapCursor(cursor);
+        Cursor old = swapCursor(cursor);
         if (old != null)
             old.close();
     }
@@ -94,6 +134,11 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
+
+    /**
+     * Override this method if you want to put something in the footer
+     */
+    public void onBindFooter(VH viewHolder) {}
 
     private class NotifyingDataSetObserver extends DataSetObserver {
         @Override

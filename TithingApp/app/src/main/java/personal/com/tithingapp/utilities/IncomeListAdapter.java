@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import personal.com.tithingapp.R;
 import personal.com.tithingapp.database.IncomeTable;
+import personal.com.tithingapp.utilities.IncomeListAdapter.IncomeViewHolder;
 import personal.com.tithingapp.utilities.ViewHolder.ViewHolderOnClickListener;
 
-public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeListAdapter.IncomeViewHolder> {
+public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolder> {
 
     private ViewHolderOnClickListener mViewClickedListener;
 
@@ -28,7 +29,7 @@ public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeListAdapt
     }
 
     @Override
-    public IncomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public IncomeViewHolder onCreateNormalViewHolder(ViewGroup parent) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.income_list_view, parent, false);
 
         TextView title = (TextView) itemView.findViewById(R.id.title);
@@ -39,6 +40,12 @@ public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeListAdapt
         viewHolder.setOnClickListener(mViewClickedListener);
 
         return viewHolder;
+    }
+
+    @Override
+    public IncomeViewHolder onCreateFooter(ViewGroup parent) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer, parent, false);
+        return new IncomeViewHolder(itemView, null, null, null);
     }
 
     public class IncomeViewHolder extends ViewHolder {

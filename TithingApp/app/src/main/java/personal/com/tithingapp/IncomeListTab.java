@@ -28,6 +28,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new IncomeListAdapter(getActivity(), null, this);
+        mAdapter.enableFooter();
         mRecyclerView.setAdapter(mAdapter);
 
         getLoaderManager().initLoader(Utils.INCOME_LOADER, null, this);

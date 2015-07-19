@@ -1,9 +1,18 @@
 <resources>
-    <color name="ColorPrimary">#2196F3</color>
-    <color name="ColorPrimaryDark">#0D47A1</color>
-    <color name="ColorPrimaryLight">#42A5F5</color>
-    <color name="tabsScrollColor">#F44336</color>
+    <!-- App colors -->
+    <color name="color_primary">#2196F3</color>
+    <color name="color_primary_dark">#0D47A1</color>
+    <color name="color_primary_light">#42A5F5</color>
+    <color name="accent">#F44336</color>
+    <color name="accent_dark">#B71C1C</color>
+    <color name="accent_light">#D32F2F</color>
+
+    <!-- Text colors -->
     <color name="text_hint">#A4A4A4</color>
 
+    <!--colors-->
     <color name="red">#CC0000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#E0E0E0</color>
 </resources>
