@@ -55,5 +55,6 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onClick(View view, int position) {
+        mChangeTabListener.replaceCurrentFragment(this, new EditIncomeTab());
     }
 }
