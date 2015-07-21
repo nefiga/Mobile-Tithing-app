@@ -10,4 +10,8 @@
     <string name="date_title">DATE:</string>
     <string name="amount_title">AMOUNT:</string>
     <string name="paid">PAID</string>
+    <string name="title_hint">Title</string>
+    <string name="amount_hint">Amount</string>
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
 </resources>

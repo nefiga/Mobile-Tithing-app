@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
         mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
         mViewPagerAdapter.addFragment(new IncomeListTab().setTitle(getResources().getString(R.string.income_tab_title)));
+        mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mViewPagerAdapter);

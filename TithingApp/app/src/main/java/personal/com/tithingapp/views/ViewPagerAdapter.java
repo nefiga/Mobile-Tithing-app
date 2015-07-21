@@ -52,6 +52,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter implements Chang
     }
 
     public void replaceCurrentFragment(TabFragment currentFragment, TabFragment newFragment) {
+        newFragment.setTabChangeListener(this);
         mChangedFragments.add(currentFragment);
         mFragments.set(mFragments.indexOf(currentFragment), newFragment);
         mFragmentManager.beginTransaction().remove(currentFragment).commit();
