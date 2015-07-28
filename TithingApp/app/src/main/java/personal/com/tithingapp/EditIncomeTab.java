@@ -13,7 +13,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import personal.com.tithingapp.parcels.IncomeParcel;
+
 public class EditIncomeTab extends DataFragment implements OnDateSetListener{
+
+    private IncomeParcel mIncomeParcel;
 
     private RelativeLayout mMainView;
     private EditText mTitle;
@@ -32,23 +36,18 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener{
         mSave = (Button) containerView.findViewById(R.id.save);
         mCancel = (Button) containerView.findViewById(R.id.cancel);
 
-        mDateDialog = new DatePickerDialog(getActivity(), this, 2015, 4, 15);
+        setListeners();
 
-        mSave.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save();
-            }
-        });
-
-        mCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
+        populateGUI();
 
         return containerView;
+    }
+
+    private void populateGUI() {
+        if (mIncomeParcel != null) {
+            mTitle.setText(mIncomeParcel.getTitle());
+            mAmount.setText(Integer.toString(mIncomeParcel.getAmount()));
+        }
     }
 
     private void save() {
@@ -65,7 +64,24 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener{
     }
 
     @Override
-    public void setParcelData(Bundle data) {
+    public void setData(Bundle data) {
+        if (data.containsKey(IncomeParcel.NAME))
+            mIncomeParcel = data.getParcelable(IncomeParcel.NAME);
+    }
 
+    private void setListeners() {
+        mSave.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+
+        mCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
     }
 }

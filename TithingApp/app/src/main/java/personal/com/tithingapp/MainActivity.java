@@ -23,15 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
 
-        /*ContentValues contentValues = new ContentValues();
-        contentValues.put(IncomeTable.TITLE, "Ryan's check");
-        contentValues.put(IncomeTable.DATE, "07/17/2015");
-        contentValues.put(IncomeTable.AMOUNT, "918.12");
-
-        for (int i = 0; i < 30; i++) {
-            getContentResolver().insert(Provider.INCOME_CONTENT_URI, contentValues);
-        }*/
-
         mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new IncomeListTab().setTitle(getResources().getString(R.string.income_tab_title)));
         mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));

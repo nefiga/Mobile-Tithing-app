@@ -84,6 +84,11 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         IncomeParcelTranslator translator = new IncomeParcelTranslator(getActivity());
         IncomeParcel incomeParcel = translator.getParcelForID(id);
 
-        mChangeTabListener.replaceCurrentFragment(this, new EditIncomeTab());
+        EditIncomeTab editIncomeTab = new EditIncomeTab();
+        Bundle data = new Bundle();
+        data.putParcelable(IncomeParcel.NAME, incomeParcel);
+        editIncomeTab.setData(data);
+
+        mChangeTabListener.replaceCurrentFragment(this, editIncomeTab);
     }
 }

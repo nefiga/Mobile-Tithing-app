@@ -3,7 +3,8 @@ package personal.com.tithingapp.parcels;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class IncomeParcel implements Parcelable{
+public class IncomeParcel implements Parcelable {
+    public static final String NAME = IncomeParcel.class.getName();
 
     private String mTitle;
     private int mAmount;
