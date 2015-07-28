@@ -1,5 +1,7 @@
 package personal.com.tithingapp;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,14 +13,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-public class EditIncomeTab extends TabFragment {
+public class EditIncomeTab extends DataFragment implements OnDateSetListener{
 
     private RelativeLayout mMainView;
     private EditText mTitle;
     private EditText mAmount;
     private Button mSave;
     private Button mCancel;
-    private DatePicker mDatePicker;
+    private DatePickerDialog mDateDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -29,7 +31,8 @@ public class EditIncomeTab extends TabFragment {
         mAmount = (EditText) containerView.findViewById(R.id.amount);
         mSave = (Button) containerView.findViewById(R.id.save);
         mCancel = (Button) containerView.findViewById(R.id.cancel);
-        mDatePicker = (DatePicker) containerView.findViewById(R.id.date_picker);
+
+        mDateDialog = new DatePickerDialog(getActivity(), this, 2015, 4, 15);
 
         mSave.setOnClickListener(new OnClickListener() {
             @Override
@@ -41,7 +44,7 @@ public class EditIncomeTab extends TabFragment {
         mCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDatePicker();
+                showDatePickerDialog();
             }
         });
 
@@ -52,13 +55,17 @@ public class EditIncomeTab extends TabFragment {
         mChangeTabListener.replaceCurrentFragment(this, new IncomeListTab());
     }
 
-    private void toggleDatePicker() {
-        if (mDatePicker.getVisibility() == View.VISIBLE) {
-            mDatePicker.setVisibility(View.GONE);
-            mMainView.setVisibility(View.VISIBLE);
-        } else {
-            mDatePicker.setVisibility(View.VISIBLE);
-            mMainView.setVisibility(View.GONE);
-        }
+    private void showDatePickerDialog() {
+        mDateDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        showDatePickerDialog();
+    }
+
+    @Override
+    public void setParcelData(Bundle data) {
+
     }
 }

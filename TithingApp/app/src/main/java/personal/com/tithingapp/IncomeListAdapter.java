@@ -25,7 +25,7 @@ public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolde
 
     @Override
     public IncomeViewHolder onCreateNormalViewHolder(ViewGroup parent) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.income_list_view, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.income_view, parent, false);
 
         TextView title = (TextView) itemView.findViewById(R.id.title);
         TextView date = (TextView) itemView.findViewById(R.id.date);
@@ -56,6 +56,6 @@ public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolde
     }
 
     public interface OnListItemClickListener {
-        void onClick(View view, int position);
+        void onClick(View view, long id);
     }
 }

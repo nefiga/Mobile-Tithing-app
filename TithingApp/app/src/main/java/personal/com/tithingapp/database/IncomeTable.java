@@ -14,5 +14,4 @@ public class IncomeTable extends TableBuilder {
     public static final String CONTENT_PATH = "income";
     public static final String CONTENT_TYPE = Provider.appendContentTypeToPath(CONTENT_PATH);
     public static final String CONTENT_ITEM_TYPE = Provider.appendContentItemTypeToPath(CONTENT_PATH);
-
 }

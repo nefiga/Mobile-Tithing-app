@@ -171,7 +171,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         View childView = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
         if (mClickListener != null && childView != null &&  mGestureDetector.onTouchEvent(motionEvent)) {
-            mClickListener.onClick(childView, recyclerView.getChildPosition(childView));
+            int position = recyclerView.getChildPosition(childView);
+            mClickListener.onClick(childView, getItemId(position));
 
             return true;
         }

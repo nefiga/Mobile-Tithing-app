@@ -4,6 +4,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/margin_small"
                 android:layout_marginRight="@dimen/margin_small"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical">
 
     <RelativeLayout
@@ -55,12 +56,4 @@
             android:layout_alignParentRight="true"
             android:text="@string/save"/>
     </RelativeLayout>
-
-    <DatePicker
-        android:id="@+id/date_picker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:visibility="gone"/>
-
 </RelativeLayout>
