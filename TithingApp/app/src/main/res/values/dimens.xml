@@ -17,9 +17,9 @@
     <dimen name="fab_height">70dp</dimen>
 
     <!--Text Sizes-->
-    <dimen name="small_text">10dp</dimen>
-    <dimen name="medium_text">15dp</dimen>
-    <dimen name="large_text">20dp</dimen>
-    <dimen name="extra_large_text">25dp</dimen>
+    <dimen name="small_text">10sp</dimen>
+    <dimen name="medium_text">15sp</dimen>
+    <dimen name="large_text">20sp</dimen>
+    <dimen name="extra_large_text">25sp</dimen>
 
 </resources>

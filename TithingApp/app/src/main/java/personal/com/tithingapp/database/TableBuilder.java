@@ -3,6 +3,7 @@ package personal.com.tithingapp.database;
 import java.util.ArrayList;
 
 public class TableBuilder {
+    public static final String DB_FLOAT = "REAL";
     public static final String DB_INTEGER = "INTEGER";
     public static final String DB_TEXT = "TEXT";
     public static final String DB_BOOLEAN = "INTEGER";

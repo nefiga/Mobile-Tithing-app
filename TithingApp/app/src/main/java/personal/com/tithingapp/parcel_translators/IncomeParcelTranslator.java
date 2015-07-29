@@ -20,8 +20,9 @@ public class IncomeParcelTranslator {
 
         Cursor cursor = mContext.getContentResolver().query(Provider.INCOME_CONTENT_URI, IncomeTable.ALL_COLUMNS, IncomeTable.WHERE_ID_EQUALS, new String[] {Long.toString(id)}, null);
         if (cursor.moveToFirst()) {
+            incomeParcel.setID(cursor.getLong(cursor.getColumnIndex(IncomeTable.ID)));
             incomeParcel.setTitle(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
-            incomeParcel.setAmount(cursor.getInt(cursor.getColumnIndex(IncomeTable.AMOUNT)));
+            incomeParcel.setAmount(cursor.getFloat(cursor.getColumnIndex(IncomeTable.AMOUNT)));
             incomeParcel.setDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE)));
         }
         cursor.close();
