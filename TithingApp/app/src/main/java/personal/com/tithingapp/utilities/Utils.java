@@ -8,7 +8,7 @@ public class Utils {
 
     public static final int INCOME_LOADER = 1;
 
-    public static String getPersitableDate(int month , int day, int year) {
+    public static String getPersistableDate(int month, int day, int year) {
         String date = "";
 
         date += month + DATE_SEPARATOR + day + DATE_SEPARATOR + year;

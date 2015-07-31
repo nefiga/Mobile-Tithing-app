@@ -46,7 +46,7 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
             instantiateDateDialogWithCurrentDate();
         }
         else {
-            populateGUI();
+            populateGUIFromIncomeParcel();
         }
 
         setListeners();
@@ -54,7 +54,7 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
         return containerView;
     }
 
-    private void populateGUI() {
+    private void populateGUIFromIncomeParcel() {
         mTitle.setText(mIncomeParcel.getTitle());
         mAmount.setText(Float.toString(mIncomeParcel.getAmount()));
         populateDateDialogWithDateFromParcel();
@@ -65,7 +65,7 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
         mIncomeParcel.setAmount(Float.parseFloat(mAmount.getText().toString()));
 
         DatePicker datePicker = mDateDialog.getDatePicker();
-        mIncomeParcel.setDate(Utils.getPersitableDate(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear()));
+        mIncomeParcel.setDate(Utils.getPersistableDate(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear()));
     }
 
     private void save() {
@@ -92,7 +92,7 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
 
     private void instantiateDateDialogWithCurrentDate() {
         Calendar calendar = Calendar.getInstance();
-        mIncomeParcel.setDate(Utils.getPersitableDate(calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        mIncomeParcel.setDate(Utils.getPersistableDate(calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
         mDateDialog = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         mDateView.setText(mIncomeParcel.getDate());
     }
@@ -105,7 +105,7 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        mIncomeParcel.setDate(Utils.getPersitableDate(monthOfYear, dayOfMonth, year));
+        mIncomeParcel.setDate(Utils.getPersistableDate(monthOfYear, dayOfMonth, year));
         mDateView.setText(mIncomeParcel.getDate());
     }
 

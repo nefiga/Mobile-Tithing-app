@@ -5,11 +5,13 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import personal.com.tithingapp.IncomeListAdapter.OnListItemClickListener;
+import personal.com.tithingapp.database.TableBuilder;
 
 public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
     private final int FOOTER_COUNT = 1;
@@ -18,8 +20,6 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     public static final int HEADER_VIEW_TYPE = 0;
     public static final int NORMAL_VIEW_TYPE = 1;
     public static final int FOOTER_VIEW_TYPE = 2;
-
-    private Context mContext;
 
     private Cursor mCursor;
 
@@ -35,19 +35,14 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     private boolean mDisplayFooter;
 
     public CursorRecyclerViewAdapter(Context context, Cursor cursor, OnListItemClickListener clickListener) {
-        mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
-        mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
+        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(TableBuilder.ID) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
-        mGestureDetector = new GestureDetector(context, new TabListGestureListener());
+        mGestureDetector = new GestureDetector(context, new SimpleTouchListener());
         mClickListener = clickListener;
         if (mCursor != null)
             mCursor.registerDataSetObserver(mDataSetObserver);
-    }
-
-    public Cursor getCursor() {
-        return mCursor;
     }
 
     @Override
@@ -131,7 +126,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         if (mCursor != null) {
             mCursor.registerDataSetObserver(mDataSetObserver);
 
-            mRowIdColumn = newCursor.getColumnIndex("_id");
+            mRowIdColumn = newCursor.getColumnIndex(TableBuilder.ID);
             mDataValid = true;
             notifyDataSetChanged();
         } else {
@@ -172,7 +167,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
         if (mClickListener != null && childView != null &&  mGestureDetector.onTouchEvent(motionEvent)) {
             int position = recyclerView.getChildPosition(childView);
-            mClickListener.onClick(childView, getItemId(position));
+            mClickListener.onItemClick(childView, getItemId(position));
 
             return true;
         }
@@ -183,5 +178,12 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     @Override
     public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
 
+    }
+
+    private class SimpleTouchListener extends SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
+        }
     }
 }

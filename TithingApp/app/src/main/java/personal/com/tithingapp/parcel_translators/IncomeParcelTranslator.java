@@ -9,16 +9,10 @@ import personal.com.tithingapp.parcels.IncomeParcel;
 
 public class IncomeParcelTranslator {
 
-    private Context mContext;
-
-    public IncomeParcelTranslator(Context context) {
-        mContext = context;
-    }
-
-    public IncomeParcel getParcelForID(long id) {
+    public static IncomeParcel getParcelForID(Context context, long id) {
         IncomeParcel incomeParcel = new IncomeParcel();
 
-        Cursor cursor = mContext.getContentResolver().query(Provider.INCOME_CONTENT_URI, IncomeTable.ALL_COLUMNS, IncomeTable.WHERE_ID_EQUALS, new String[] {Long.toString(id)}, null);
+        Cursor cursor = context.getContentResolver().query(Provider.INCOME_CONTENT_URI, IncomeTable.ALL_COLUMNS, IncomeTable.WHERE_ID_EQUALS, new String[] {Long.toString(id)}, null);
         if (cursor.moveToFirst()) {
             incomeParcel.setID(cursor.getLong(cursor.getColumnIndex(IncomeTable.ID)));
             incomeParcel.setTitle(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));

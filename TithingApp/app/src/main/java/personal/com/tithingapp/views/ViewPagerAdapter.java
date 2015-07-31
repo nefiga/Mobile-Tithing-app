@@ -33,8 +33,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter implements Chang
 
     @Override
     public int getItemPosition(Object object) {
-        if (mChangedFragments.contains(object)) {
-            mChangedFragments.remove(object);
+        TabFragment fragment = (TabFragment) object;
+        if (mChangedFragments.contains(fragment)) {
+            mChangedFragments.remove(fragment);
             return POSITION_NONE;
         }
 

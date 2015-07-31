@@ -56,6 +56,6 @@ public class IncomeListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolde
     }
 
     public interface OnListItemClickListener {
-        void onClick(View view, long id);
+        void onItemClick(View view, long id);
     }
 }

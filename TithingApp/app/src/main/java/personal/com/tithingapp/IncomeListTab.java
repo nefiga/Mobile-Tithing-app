@@ -26,7 +26,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
     protected FloatingActionButton mFab;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.income_list, container, false);
+        View v = inflater.inflate(R.layout.income_list, container, false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -44,6 +44,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         setListeners();
 
         getLoaderManager().initLoader(Utils.INCOME_LOADER, null, this);
+
         return v;
     }
 
@@ -80,13 +81,11 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onClick(View view, long id) {
-        IncomeParcelTranslator translator = new IncomeParcelTranslator(getActivity());
-        IncomeParcel incomeParcel = translator.getParcelForID(id);
+    public void onItemClick(View view, long id) {
+        Bundle data = new Bundle();
+        data.putParcelable(IncomeParcel.NAME, IncomeParcelTranslator.getParcelForID(getActivity(), id));
 
         EditIncomeTab editIncomeTab = new EditIncomeTab();
-        Bundle data = new Bundle();
-        data.putParcelable(IncomeParcel.NAME, incomeParcel);
         editIncomeTab.setData(data);
 
         mChangeTabListener.replaceCurrentFragment(this, editIncomeTab);
