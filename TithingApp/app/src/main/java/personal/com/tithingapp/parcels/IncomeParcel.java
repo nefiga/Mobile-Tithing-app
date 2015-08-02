@@ -3,62 +3,20 @@ package personal.com.tithingapp.parcels;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
-
 import personal.com.tithingapp.database.IncomeTable;
-import personal.com.tithingapp.database.Persistable;
 import personal.com.tithingapp.database.Provider;
-import personal.com.tithingapp.utilities.Utils;
 
-public class IncomeParcel implements Persistable {
-    public static final String NAME = IncomeParcel.class.getName();
-
-    private Long mID = Utils.EMPTY_LONG;
-    private String mTitle;
-    private float mAmount;
-    private String mDate;
+/**
+ * Created by ryant on 8/2/15.
+ */
+public class IncomeParcel extends DataParcel {
 
     public IncomeParcel() {
         // Default constructor
     }
 
-    public void setID(long id) {
-        mID = id;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
-    public void setAmount(float amount) {
-        mAmount = amount;
-    }
-
-    public void setDate(String date) {
-        mDate = date;
-    }
-
-    public long getID() {
-        return mID;
-    }
-
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public float getAmount() {
-        return mAmount;
-    }
-
-    public String getDate() {
-        return mDate;
-    }
-
-    public boolean hasID() {
-        return !mID.equals(Utils.EMPTY_LONG);
-    }
-
-    protected IncomeParcel(Parcel in) {
-        readFromParcel(in);
+    public IncomeParcel(Parcel in) {
+        super(in);
     }
 
     public static final Creator<IncomeParcel> CREATOR = new Creator<IncomeParcel>() {
@@ -72,26 +30,6 @@ public class IncomeParcel implements Persistable {
             return new IncomeParcel[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mID);
-        dest.writeString(mTitle);
-        dest.writeFloat(mAmount);
-        dest.writeString(mDate);
-    }
-
-    private void readFromParcel(Parcel parcel) {
-        mID = parcel.readLong();
-        mTitle = parcel.readString();
-        mAmount = parcel.readFloat();
-        mDate = parcel.readString();
-    }
 
     @Override
     public ContentValues getContentValues() {

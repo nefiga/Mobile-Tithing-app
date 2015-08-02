@@ -1,4 +1,4 @@
-package personal.com.tithingapp;
+package personal.com.tithingapp.tabs;
 
 import android.support.v4.app.Fragment;
 

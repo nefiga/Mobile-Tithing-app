@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import personal.com.tithingapp.IncomeListAdapter.OnListItemClickListener;
+import personal.com.tithingapp.ListAdapter.OnListItemClickListener;
 import personal.com.tithingapp.database.TableBuilder;
 
 public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
@@ -71,6 +71,10 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
             return FOOTER_VIEW_TYPE;
 
         return NORMAL_VIEW_TYPE;
+    }
+
+    public boolean isHeaderOrFooter(int viewType) {
+        return viewType == FOOTER_VIEW_TYPE || viewType == HEADER_VIEW_TYPE;
     }
 
     @Override
@@ -167,7 +171,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
         if (mClickListener != null && childView != null &&  mGestureDetector.onTouchEvent(motionEvent)) {
             int position = recyclerView.getChildPosition(childView);
-            mClickListener.onItemClick(childView, getItemId(position));
+
+            if (!isHeaderOrFooter(getItemViewType(position)))
+                mClickListener.onItemClick(childView, getItemId(position));
 
             return true;
         }

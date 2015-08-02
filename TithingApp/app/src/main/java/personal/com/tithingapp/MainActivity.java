@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import personal.com.tithingapp.tabs.IncomeListTab;
+import personal.com.tithingapp.tabs.TithingTab;
 import personal.com.tithingapp.views.SlidingTabLayout;
 import personal.com.tithingapp.views.ViewPagerAdapter;
 

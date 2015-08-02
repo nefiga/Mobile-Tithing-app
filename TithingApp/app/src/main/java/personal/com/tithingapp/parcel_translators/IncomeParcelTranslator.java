@@ -2,7 +2,6 @@ package personal.com.tithingapp.parcel_translators;
 
 import android.content.Context;
 import android.database.Cursor;
-
 import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.database.Provider;
 import personal.com.tithingapp.parcels.IncomeParcel;

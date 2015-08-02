@@ -1,4 +1,4 @@
-package personal.com.tithingapp;
+package personal.com.tithingapp.tabs;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,17 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-
-import personal.com.tithingapp.IncomeListAdapter.OnListItemClickListener;
-import personal.com.tithingapp.database.Provider;
-import personal.com.tithingapp.parcel_translators.IncomeParcelTranslator;
-import personal.com.tithingapp.parcels.IncomeParcel;
+import personal.com.tithingapp.ListAdapter;
+import personal.com.tithingapp.ListAdapter.OnListItemClickListener;
+import personal.com.tithingapp.R;
 import personal.com.tithingapp.utilities.Utils;
 
-public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnListItemClickListener{
+public abstract class ListTab extends TabFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnListItemClickListener{
 
     protected RecyclerView mRecyclerView;
-    protected IncomeListAdapter mAdapter;
+    protected ListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected FloatingActionButton mFab;
 
@@ -34,7 +32,7 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new IncomeListAdapter(getActivity(), null, this);
+        mAdapter = new ListAdapter(getActivity(), null, this);
         mAdapter.enableFooter();
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(mAdapter);
@@ -52,23 +50,12 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
         mFab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadNewEditIncomeTab();
+                loadNewEditTab();
             }
         });
     }
 
-    private void loadNewEditIncomeTab() {
-        mChangeTabListener.replaceCurrentFragment(this, new EditIncomeTab());
-    }
-
-    @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id == Utils.INCOME_LOADER) {
-            return new android.support.v4.content.CursorLoader(getActivity(), Provider.INCOME_CONTENT_URI, null, null, null, null);
-        }
-
-        return null;
-    }
+    protected abstract void loadNewEditTab();
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
@@ -77,17 +64,6 @@ public class IncomeListTab extends TabFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-
-    }
-
-    @Override
-    public void onItemClick(View view, long id) {
-        Bundle data = new Bundle();
-        data.putParcelable(IncomeParcel.NAME, IncomeParcelTranslator.getParcelForID(getActivity(), id));
-
-        EditIncomeTab editIncomeTab = new EditIncomeTab();
-        editIncomeTab.setData(data);
-
-        mChangeTabListener.replaceCurrentFragment(this, editIncomeTab);
+        mAdapter.changeCursor(null);
     }
 }

@@ -1,6 +1,6 @@
 package personal.com.tithingapp.models;
 
-public class EditIncomeModel {
+public class EditModel {
 
     public boolean validateTitle(String title) {
         String expression = "^(?!\\s*$).+";
