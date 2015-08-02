@@ -1,5 +1,7 @@
 package personal.com.tithingapp;
 
+import java.util.Calendar;
+
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
@@ -12,9 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.Calendar;
-
+import personal.com.tithingapp.models.EditIncomeModel;
 import personal.com.tithingapp.parcels.IncomeParcel;
 import personal.com.tithingapp.services.ServiceHelper;
 import personal.com.tithingapp.utilities.Utils;
@@ -23,6 +23,7 @@ import personal.com.tithingapp.utilities.Utils.SimpleDate;
 public class EditIncomeTab extends DataFragment implements OnDateSetListener {
 
     private IncomeParcel mIncomeParcel;
+    private EditIncomeModel mIncome;
 
     private EditText mTitle;
     private EditText mAmount;
@@ -34,6 +35,8 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View containerView = inflater.inflate(R.layout.edit_income, container, false);
+
+        mIncome = new EditIncomeModel();
 
         mTitle = (EditText) containerView.findViewById(R.id.title);
         mAmount = (EditText) containerView.findViewById(R.id.amount);
@@ -69,14 +72,32 @@ public class EditIncomeTab extends DataFragment implements OnDateSetListener {
     }
 
     private void save() {
-        populateParcel();
+        if (validate()) {
+            populateParcel();
 
-        if (mIncomeParcel.hasID())
-            ServiceHelper.updatePersistable(getActivity(), mIncomeParcel);
-        else
-            ServiceHelper.savePersistable(getActivity(), mIncomeParcel);
+            if (mIncomeParcel.hasID())
+                ServiceHelper.updatePersistable(getActivity(), mIncomeParcel);
+            else
+                ServiceHelper.savePersistable(getActivity(), mIncomeParcel);
 
-        mChangeTabListener.replaceCurrentFragment(this, new IncomeListTab());
+            mChangeTabListener.replaceCurrentFragment(this, new IncomeListTab());
+        }
+    }
+
+    private boolean validate() {
+        boolean valid = true;
+
+        if (!mIncome.validateTitle(mTitle.getText().toString())) {
+            valid = false;
+            mTitle.setError("Title must not be blank");
+        }
+
+        if (!mIncome.validateAmount(mAmount.getText().toString())) {
+            valid = false;
+            mAmount.setError("Invalid amount");
+        }
+
+        return valid;
     }
 
     private void cancel() {

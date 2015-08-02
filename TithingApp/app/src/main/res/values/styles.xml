@@ -14,4 +14,14 @@
         <item name="elevation">6dp</item>
         <item name="pressedTranslationZ">12dp</item>
     </style>
+
+    <style name="NoteBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/note_box_height</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="android:gravity">top|left</item>
+        <item name="android:padding">@dimen/margin_small</item>
+        <item name="android:hint">@string/note_hint</item>
+        <item name="android:background">@drawable/note_block</item>
+    </style>
 </resources>

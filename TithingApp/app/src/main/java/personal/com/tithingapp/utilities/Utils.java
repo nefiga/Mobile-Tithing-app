@@ -1,7 +1,7 @@
 package personal.com.tithingapp.utilities;
 
 public class Utils {
-    public static final String BLANK_STRING = "";
+    public static final String EMPTY_STRING = "";
     public static final Long EMPTY_LONG = 0L;
 
     private static final String DATE_SEPARATOR = "-";

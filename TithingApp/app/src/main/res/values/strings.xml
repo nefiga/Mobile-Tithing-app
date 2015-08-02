@@ -15,4 +15,5 @@
     <string name="amount_hint">Amount</string>
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
+    <string name="note_hint">Notes:</string>
 </resources>
