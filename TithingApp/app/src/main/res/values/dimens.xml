@@ -12,9 +12,8 @@
     <dimen name="vertical_page_margin">@dimen/margin_medium</dimen>
 
     <!-- View Dimensions -->
-    <dimen name="fab_margin">10dp</dimen>
-    <dimen name="fab_tablet_height">100dp</dimen>
-    <dimen name="fab_height">70dp</dimen>
+    <dimen name="fab_margin">12dp</dimen>
+    <dimen name="fab_height">75dp</dimen>
     <dimen name="note_box_height">150dp</dimen>
 
     <!--Text Sizes-->

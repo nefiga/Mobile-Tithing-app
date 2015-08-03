@@ -8,7 +8,6 @@
     <style name="FabStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/fab_margin</item>
         <item name="android:src">@drawable/fab</item>
         <item name="borderWidth">0dp</item>
         <item name="elevation">6dp</item>
@@ -23,5 +22,12 @@
         <item name="android:padding">@dimen/margin_small</item>
         <item name="android:hint">@string/note_hint</item>
         <item name="android:background">@drawable/note_block</item>
+    </style>
+
+    <style name="Footer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:orientation">vertical</item>
     </style>
 </resources>
