@@ -16,7 +16,7 @@
 
     <style name="NoteBox">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/note_box_height</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:inputType">textMultiLine|textCapSentences</item>
         <item name="android:gravity">top|left</item>
         <item name="android:padding">@dimen/margin_small</item>
