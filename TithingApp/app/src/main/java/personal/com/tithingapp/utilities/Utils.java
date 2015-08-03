@@ -6,7 +6,7 @@ public class Utils {
 
     private static final String DATE_SEPARATOR = "-";
 
-    public static final int INCOME_LOADER = 1;
+    public static final int TITHING_INCOME_LOADER = 1;
 
     public static String getPersistableDate(int month, int day, int year) {
         String date = "";

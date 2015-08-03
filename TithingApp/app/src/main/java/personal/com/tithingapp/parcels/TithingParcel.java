@@ -30,7 +30,6 @@ public class TithingParcel extends DataParcel {
 
     @Override
     public ContentValues getContentValues() {
-        //TODO need to make tithing table
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(TithingTable.TITLE, mTitle);

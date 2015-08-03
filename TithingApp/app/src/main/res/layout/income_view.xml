@@ -19,14 +19,6 @@
             android:layout_marginTop="@dimen/margin_small">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:text="@string/paid"
-                android:textColor="@color/red"/>
-
-            <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

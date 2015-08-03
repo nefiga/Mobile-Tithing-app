@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import personal.com.tithingapp.tabs.IncomeListTab;
-import personal.com.tithingapp.tabs.TithingTab;
+import personal.com.tithingapp.tabs.TithingListTab;
 import personal.com.tithingapp.views.SlidingTabLayout;
 import personal.com.tithingapp.views.ViewPagerAdapter;
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new IncomeListTab().setTitle(getResources().getString(R.string.income_tab_title)));
-        mViewPagerAdapter.addFragment(new TithingTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
+        mViewPagerAdapter.addFragment(new TithingListTab().setTitle(getResources().getString(R.string.tithing_tab_title)));
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mViewPagerAdapter);

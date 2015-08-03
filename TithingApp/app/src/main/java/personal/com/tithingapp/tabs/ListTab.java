@@ -41,7 +41,7 @@ public abstract class ListTab extends TabFragment implements LoaderManager.Loade
 
         setListeners();
 
-        getLoaderManager().initLoader(Utils.INCOME_LOADER, null, this);
+        getLoaderManager().initLoader(Utils.TITHING_INCOME_LOADER, null, this);
 
         return v;
     }
