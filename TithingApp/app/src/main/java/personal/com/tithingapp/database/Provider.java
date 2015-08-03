@@ -20,9 +20,12 @@ public class Provider extends ContentProvider{
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
     public static final Uri INCOME_CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, IncomeTable.CONTENT_PATH);
+    public static final Uri TITHING_CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TithingTable.CONTENT_PATH);
 
     public static final int INCOME_DIR = 1;
     public static final int INCOME_ID = 2;
+    public static final int TITHING_DIR = 3;
+    public static final int TITHING_ID = 4;
 
     private static final UriMatcher URI_MATCHER;
 
@@ -31,6 +34,7 @@ public class Provider extends ContentProvider{
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         addToUriMatcher(IncomeTable.CONTENT_PATH, INCOME_DIR, INCOME_ID);
+        addToUriMatcher(TithingTable.CONTENT_PATH, TITHING_DIR, TITHING_ID);
     }
 
     @Override
@@ -51,6 +55,10 @@ public class Provider extends ContentProvider{
                 return IncomeTable.CONTENT_TYPE;
             case INCOME_ID:
                 return IncomeTable.CONTENT_ITEM_TYPE;
+            case TITHING_DIR:
+                return TithingTable.CONTENT_TYPE;
+            case TITHING_ID:
+                return TithingTable.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI " + uri);
         }
@@ -67,6 +75,12 @@ public class Provider extends ContentProvider{
                 break;
             case INCOME_DIR:
                 queryBuilder.setTables(IncomeTable.TABLE_NAME);
+                break;
+            case TITHING_ID:
+                queryBuilder.appendWhere(TithingTable.ID + "=" + uri.getPathSegments().get(1));
+                break;
+            case TITHING_DIR:
+                queryBuilder.setTables(TithingTable.TABLE_NAME);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI " + uri);
@@ -89,6 +103,9 @@ public class Provider extends ContentProvider{
                 case INCOME_DIR:
                 case INCOME_ID:
                     return insert(databaseConnection, IncomeTable.TABLE_NAME, INCOME_CONTENT_URI, values);
+                case TITHING_DIR:
+                case TITHING_ID:
+                    return insert(databaseConnection, TithingTable.TABLE_NAME, TITHING_CONTENT_URI, values);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,6 +140,12 @@ public class Provider extends ContentProvider{
                     break;
                 case INCOME_ID:
                     deleteCount = deleteId(databaseConnection, IncomeTable.TABLE_NAME, uri);
+                    break;
+                case TITHING_DIR:
+                    deleteCount = deleteSelection(databaseConnection, TithingTable.TABLE_NAME, selection, selectionArgs);
+                    break;
+                case TITHING_ID:
+                    deleteCount = deleteId(databaseConnection, TithingTable.TABLE_NAME, uri);
                     break;
             }
         } finally {
@@ -159,6 +182,12 @@ public class Provider extends ContentProvider{
                     break;
                 case INCOME_ID:
                     updateCount = updateId(databaseConnection, IncomeTable.TABLE_NAME, values, uri, selection, selectionArgs);
+                    break;
+                case TITHING_DIR:
+                    updateCount = updateSelection(databaseConnection, TithingTable.TABLE_NAME, values, selection, selectionArgs);
+                    break;
+                case TITHING_ID:
+                    updateCount = updateId(databaseConnection, TithingTable.TABLE_NAME, values, uri, selection, selectionArgs);
                     break;
             }
         } finally {

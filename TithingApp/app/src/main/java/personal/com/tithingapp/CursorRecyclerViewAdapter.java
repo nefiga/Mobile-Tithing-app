@@ -73,7 +73,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         return NORMAL_VIEW_TYPE;
     }
 
-    public boolean isHeaderOrFooter(int viewType) {
+    public boolean isHeaderOrFooter(int position) {
+        int viewType = getItemViewType(position);
+
         return viewType == FOOTER_VIEW_TYPE || viewType == HEADER_VIEW_TYPE;
     }
 
@@ -172,7 +174,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         if (mClickListener != null && childView != null &&  mGestureDetector.onTouchEvent(motionEvent)) {
             int position = recyclerView.getChildPosition(childView);
 
-            if (!isHeaderOrFooter(getItemViewType(position)))
+            if (!isHeaderOrFooter(position))
                 mClickListener.onItemClick(childView, getItemId(position));
 
             return true;
