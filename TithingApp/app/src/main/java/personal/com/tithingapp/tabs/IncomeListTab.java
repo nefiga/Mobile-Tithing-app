@@ -2,7 +2,9 @@ package personal.com.tithingapp.tabs;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
 import android.view.View;
+import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.database.Provider;
 import personal.com.tithingapp.parcel_translators.IncomeParcelTranslator;
 import personal.com.tithingapp.parcels.DataParcel;
@@ -17,7 +19,10 @@ public class IncomeListTab extends ListTab {
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == Utils.TITHING_INCOME_LOADER) {
-            return new android.support.v4.content.CursorLoader(getActivity(), Provider.INCOME_CONTENT_URI, null, null, null, null);
+            CursorLoader cursorLoader =  new CursorLoader(getActivity(), Provider.INCOME_CONTENT_URI, null, null, null, null);
+            cursorLoader.setSortOrder(IncomeTable.DATE + " ASC");
+
+            return cursorLoader;
         }
 
         return null;

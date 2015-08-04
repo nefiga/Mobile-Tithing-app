@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import personal.com.tithingapp.ListAdapter.IncomeViewHolder;
 import personal.com.tithingapp.database.IncomeTable;
+import personal.com.tithingapp.utilities.Utils;
 
 public class ListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolder> {
 
@@ -20,7 +21,7 @@ public class ListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolder> {
     @Override
     public void onBindViewHolder(IncomeViewHolder viewHolder, Cursor cursor) {
         viewHolder.mTitle.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
-        viewHolder.mDate.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE)));
+        viewHolder.mDate.setText(Utils.getDisplayDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
         viewHolder.mAmount.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.AMOUNT)));
 
         String notes = cursor.getString(cursor.getColumnIndex(IncomeTable.NOTES));
