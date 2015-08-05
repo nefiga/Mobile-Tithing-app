@@ -19,10 +19,7 @@ public class IncomeListTab extends ListTab {
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == Utils.TITHING_INCOME_LOADER) {
-            CursorLoader cursorLoader =  new CursorLoader(getActivity(), Provider.INCOME_CONTENT_URI, null, null, null, null);
-            cursorLoader.setSortOrder(IncomeTable.DATE + " ASC");
-
-            return cursorLoader;
+            return  new CursorLoader(getActivity(), Provider.INCOME_CONTENT_URI, null, null, null, IncomeTable.DATE + " ASC");
         }
 
         return null;

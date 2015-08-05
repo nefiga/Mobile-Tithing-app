@@ -2,8 +2,10 @@ package personal.com.tithingapp.tabs;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
 import android.view.View;
 import personal.com.tithingapp.database.Provider;
+import personal.com.tithingapp.database.TithingTable;
 import personal.com.tithingapp.parcel_translators.TithingParcelTranslator;
 import personal.com.tithingapp.parcels.DataParcel;
 import personal.com.tithingapp.utilities.Utils;
@@ -17,7 +19,7 @@ public class TithingListTab extends ListTab {
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == Utils.TITHING_INCOME_LOADER) {
-            return new android.support.v4.content.CursorLoader(getActivity(), Provider.TITHING_CONTENT_URI, null, null, null, null);
+            return new CursorLoader(getActivity(), Provider.TITHING_CONTENT_URI, null, null, null, TithingTable.DATE + " ASC");
         }
 
         return null;
