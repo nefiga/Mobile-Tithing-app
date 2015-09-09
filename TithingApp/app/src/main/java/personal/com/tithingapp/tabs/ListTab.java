@@ -60,11 +60,6 @@ public abstract class ListTab extends TabFragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        //TODO Need to grab all the dates and figure out how many section headers I need and what their position and title will be
-        /*List<String> dates = new ArrayList<>();
-        while (data.moveToNext()) {
-            dates.add(data.getString(data.getColumnIndex(TithingTable.DATE)));
-        }*/
         mAdapter.changeCursor(data);
     }
 

@@ -1,7 +1,6 @@
 package personal.com.tithingapp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,17 +12,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import personal.com.tithingapp.ListAdapter.OnListItemClickListener;
-import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.database.TableBuilder;
-import personal.com.tithingapp.utilities.Utils;
-import personal.com.tithingapp.utilities.Utils.SimpleDate;
 
-public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
+public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
     private final int FOOTER_COUNT = 1;
     private final int NO_ITEMS = 0;
 
-    public static final int HEADER_VIEW_TYPE = 0;
-    public static final int NORMAL_VIEW_TYPE = 1;
+    public static final int DEFAULT_VIEW_TYPE = 0;
     public static final int FOOTER_VIEW_TYPE = 2;
     public static final int SECTION_VIEW_TYPE = 3;
 
@@ -56,8 +51,12 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
     @Override
     public int getItemCount() {
-        if (mViewTypes != null)
+        if (mViewTypes != null) {
+            if (mFooterAdapter != null)
+                return mViewTypes.length + FOOTER_COUNT;
+
             return mViewTypes.length;
+        }
 
         return NO_ITEMS;
     }
@@ -72,13 +71,10 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
     @Override
     public int getItemViewType(int position) {
+        if (isFooterPosition(position))
+            return FOOTER_VIEW_TYPE;
+
         return mViewTypes[position];
-    }
-
-    public boolean isHeaderOrFooter(int position) {
-        int viewType = getItemViewType(position);
-
-        return viewType == FOOTER_VIEW_TYPE || viewType == HEADER_VIEW_TYPE;
     }
 
     @Override
@@ -96,29 +92,51 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         return onCreateViewHolder(parent);
     }
 
-    public abstract VH onCreateViewHolder(ViewGroup parent);
-
     @Override
     public void onBindViewHolder(VH holder, int position) {
         if (!mDataValid)
             throw new IllegalStateException("This should only be called when the cursor is valid");
 
-        if (position < 0 || position >= mViewTypes.length)
+        if (position < 0 || position > mViewTypes.length)
             throw new IllegalStateException("No view type found for position " + position);
-        if (mViewTypes[position] == NORMAL_VIEW_TYPE) {
-            mCursor.moveToPosition(position - sectionOffsetForPosition(position));
-            onBindViewHolder(holder, mCursor);
-        }
-        else if (mViewTypes[position] == FOOTER_VIEW_TYPE) {
+
+        if (isFooterPosition(position)) {
             mFooterAdapter.onBindFooter(holder);
-        }
-        else if (mViewTypes[position] == SECTION_VIEW_TYPE) {
-            mCursor.moveToPosition(position - sectionOffsetForPosition(position));
+        } else if (mViewTypes[position] == DEFAULT_VIEW_TYPE) {
+            mCursor.moveToPosition(position - getSectionOffsetForPosition(position));
+            onBindViewHolder(holder, mCursor);
+        } else if (mViewTypes[position] == SECTION_VIEW_TYPE) {
+            mCursor.moveToPosition(position - getSectionOffsetForPosition(position));
             mSectionAdapter.onBindSectionViewHolder(holder, mCursor);
-        }
-        else {
+        } else {
             throw new IllegalStateException("No view type found for position " + position);
         }
+    }
+
+    public boolean isNormalView(int position) {
+        return getItemViewType(position) == DEFAULT_VIEW_TYPE;
+    }
+
+    private boolean isFooterPosition(int position) {
+        return position == mViewTypes.length && mFooterAdapter != null;
+    }
+
+    public int[] getViewTypes(Cursor cursor) {
+        int[] viewTypes = new int[cursor.getCount()];
+        Arrays.fill(viewTypes, DEFAULT_VIEW_TYPE);
+
+        return viewTypes;
+    }
+
+    private int getSectionOffsetForPosition(int position) {
+        int sections = 0;
+
+        for (int i = 0; i < position; i++) {
+            if (mViewTypes[i] == SECTION_VIEW_TYPE)
+                sections++;
+        }
+
+        return sections;
     }
 
     public void enableFooter(FooterAdapter<VH> footerAdapter) {
@@ -145,8 +163,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
         mCursor = newCursor;
         if (mCursor != null) {
-            if (mSectionAdapter != null)
-                setUpSections();
+            mViewTypes = getViewTypes(mCursor);
 
             mCursor.registerDataSetObserver(mDataSetObserver);
 
@@ -162,52 +179,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         return oldCursor;
     }
 
-    private void setUpSections() {
-        List<SimpleDate> dates = new ArrayList<>();
-        List<Integer> section = new ArrayList<>();
-
-        if (mCursor.moveToFirst()) {
-            dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
-
-            while (mCursor.moveToNext()) {
-                dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
-            }
-        }
-
-        int sections = 0;
-        for (int i = 0; i < dates.size(); i++) {
-            if (i == 0) {
-                section.add(i + sections);
-                sections++;
-            } else if (dates.get(i).month > dates.get(i -1).month) {
-                section.add(i + sections);
-                sections++;
-            }
-        }
-
-        mViewTypes = new int[dates.size() + section.size() + (mFooterAdapter != null ? FOOTER_COUNT : 0)];
-
-        for (int i = 0; i < mViewTypes.length; i++) {
-            if (i == mViewTypes.length -1 && mFooterAdapter != null)
-                mViewTypes[i] = FOOTER_VIEW_TYPE;
-            else if (section.contains(i))
-                mViewTypes[i] = SECTION_VIEW_TYPE;
-            else
-                mViewTypes[i] = NORMAL_VIEW_TYPE;
-
-        }
-    }
-
-    private int sectionOffsetForPosition(int position) {
-        int sections = 0;
-
-        for (int i = 0; i < position; i++) {
-            if (mViewTypes[i] == SECTION_VIEW_TYPE)
-                sections++;
-        }
-
-        return sections;
-    }
+    public abstract VH onCreateViewHolder(ViewGroup parent);
 
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
 
@@ -231,11 +203,13 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
         View childView = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
-        if (mClickListener != null && childView != null &&  mGestureDetector.onTouchEvent(motionEvent)) {
-            int position = recyclerView.getChildPosition(childView);
+        if (mClickListener != null && childView != null && mGestureDetector.onTouchEvent(motionEvent)) {
+            int position = recyclerView.getChildLayoutPosition(childView);
 
-            if (!isHeaderOrFooter(position))
+            if (isNormalView(position)) {
+                position = position - getSectionOffsetForPosition(position);
                 mClickListener.onItemClick(childView, getItemId(position));
+            }
 
             return true;
         }

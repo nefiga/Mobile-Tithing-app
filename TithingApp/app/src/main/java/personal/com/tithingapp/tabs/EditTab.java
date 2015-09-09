@@ -20,7 +20,7 @@ import personal.com.tithingapp.models.EditModel;
 import personal.com.tithingapp.parcels.DataParcel;
 import personal.com.tithingapp.services.ServiceHelper;
 import personal.com.tithingapp.utilities.Utils;
-import personal.com.tithingapp.utilities.Utils.SimpleDate;
+import personal.com.tithingapp.utilities.SimpleDate;
 
 public abstract class EditTab extends DataFragment implements OnDateSetListener {
 

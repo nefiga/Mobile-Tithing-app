@@ -32,16 +32,4 @@ public class Utils {
 
         return new SimpleDate(month, day, year);
     }
-
-    public static class SimpleDate {
-        public final int month;
-        public final int day;
-        public final int year;
-
-        public SimpleDate(int month, int day, int year) {
-            this.month = month;
-            this.day = day;
-            this.year = year;
-        }
-    }
 }

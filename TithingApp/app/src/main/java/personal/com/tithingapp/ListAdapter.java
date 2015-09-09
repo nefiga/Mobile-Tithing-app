@@ -1,5 +1,8 @@
 package personal.com.tithingapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -9,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.utilities.Utils;
-import personal.com.tithingapp.utilities.Utils.SimpleDate;
+import personal.com.tithingapp.utilities.SimpleDate;
 
 public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implements FooterAdapter<ViewHolder>, SectionAdapter<ViewHolder> {
 
@@ -47,6 +50,43 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
     }
 
     @Override
+    public int[] getViewTypes(Cursor mCursor) {
+        int[] viewTypes;
+        List<SimpleDate> dates = new ArrayList<>();
+        List<Integer> section = new ArrayList<>();
+
+        if (mCursor.moveToFirst()) {
+            dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
+
+            while (mCursor.moveToNext()) {
+                dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
+            }
+        }
+
+        int sections = 0;
+        for (int i = 0; i < dates.size(); i++) {
+            if (i == 0) {
+                section.add(i + sections);
+                sections++;
+            } else if (dates.get(i).month > dates.get(i -1).month) {
+                section.add(i + sections);
+                sections++;
+            }
+        }
+
+        viewTypes = new int[dates.size() + section.size()];
+
+        for (int i = 0; i < viewTypes.length; i++) {
+            if (section.contains(i))
+                viewTypes[i] = SECTION_VIEW_TYPE;
+            else
+                viewTypes[i] = DEFAULT_VIEW_TYPE;
+        }
+
+        return viewTypes;
+    }
+
+    @Override
     public ViewHolder onCreateFooter(ViewGroup parent) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer, parent, false);
         return new IncomeViewHolder(itemView, null, null, null, null);
@@ -78,39 +118,8 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
             String date = cursor.getString(cursor.getColumnIndex(IncomeTable.DATE));
             SimpleDate simpleDate = Utils.getSimpleDateFromPersistableDate(date);
 
-            sectionViewHolder.mTitle.setText(readableMonth(simpleDate.month) + "  " + simpleDate.year);
+            sectionViewHolder.mTitle.setText(simpleDate.getReadableMonth() + "  " + simpleDate.year);
         }
-    }
-
-    private String readableMonth(int month) {
-        switch (month) {
-            case 0:
-                return "January";
-            case 1:
-                return "February";
-            case 2:
-                return "March";
-            case 3:
-                return "April";
-            case 4:
-                return "May";
-            case 5:
-                return "June";
-            case 6:
-                return "July";
-            case 7:
-                return "August";
-            case 8:
-                return "September";
-            case 9:
-                return "October";
-            case 10:
-                return "November";
-            case 11:
-                return "December";
-        }
-
-        return "Not a month";
     }
 
     public class IncomeViewHolder extends ViewHolder {
