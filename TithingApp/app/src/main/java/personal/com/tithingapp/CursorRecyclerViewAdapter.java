@@ -1,5 +1,8 @@
 package personal.com.tithingapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -9,9 +12,11 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import personal.com.tithingapp.ListAdapter.OnListItemClickListener;
+import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.database.TableBuilder;
+import personal.com.tithingapp.utilities.Utils;
+import personal.com.tithingapp.utilities.Utils.SimpleDate;
 
 public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
     private final int FOOTER_COUNT = 1;
@@ -20,6 +25,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     public static final int HEADER_VIEW_TYPE = 0;
     public static final int NORMAL_VIEW_TYPE = 1;
     public static final int FOOTER_VIEW_TYPE = 2;
+    public static final int SECTION_VIEW_TYPE = 3;
+
+    private int[] mViewTypes;
 
     private Cursor mCursor;
 
@@ -32,7 +40,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     private OnListItemClickListener mClickListener;
     private GestureDetector mGestureDetector;
 
-    private boolean mDisplayFooter;
+    private FooterAdapter<VH> mFooterAdapter;
+    private SectionAdapter<VH> mSectionAdapter;
 
     public CursorRecyclerViewAdapter(Context context, Cursor cursor, OnListItemClickListener clickListener) {
         mCursor = cursor;
@@ -47,14 +56,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
     @Override
     public int getItemCount() {
-        if (mDataValid && mCursor != null) {
-            int itemCount = mCursor.getCount();
-
-            if (mDisplayFooter)
-                itemCount += FOOTER_COUNT;
-
-            return itemCount;
-        }
+        if (mViewTypes != null)
+            return mViewTypes.length;
 
         return NO_ITEMS;
     }
@@ -69,10 +72,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
     @Override
     public int getItemViewType(int position) {
-        if (mCursor != null && position >= mCursor.getCount())
-            return FOOTER_VIEW_TYPE;
-
-        return NORMAL_VIEW_TYPE;
+        return mViewTypes[position];
     }
 
     public boolean isHeaderOrFooter(int position) {
@@ -89,31 +89,44 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == FOOTER_VIEW_TYPE)
-            return onCreateFooter(parent);
+            return mFooterAdapter.onCreateFooter(parent);
+        else if (viewType == SECTION_VIEW_TYPE)
+            return mSectionAdapter.onCreateSectionViewHolder(parent);
 
-        return onCreateNormalViewHolder(parent);
+        return onCreateViewHolder(parent);
     }
 
-    public abstract VH onCreateNormalViewHolder(ViewGroup parent);
-
-    public abstract VH onCreateFooter(ViewGroup parent);
+    public abstract VH onCreateViewHolder(ViewGroup parent);
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         if (!mDataValid)
             throw new IllegalStateException("This should only be called when the cursor is valid");
 
-        if (!mCursor.moveToPosition(position) && !mDisplayFooter && position != mCursor.getCount())
-            throw new IllegalStateException("Couldn't move cursor to position " + position);
-
-        if (position < mCursor.getCount())
+        if (position < 0 || position >= mViewTypes.length)
+            throw new IllegalStateException("No view type found for position " + position);
+        if (mViewTypes[position] == NORMAL_VIEW_TYPE) {
+            mCursor.moveToPosition(position - sectionOffsetForPosition(position));
             onBindViewHolder(holder, mCursor);
-        else
-            onBindFooter(holder);
+        }
+        else if (mViewTypes[position] == FOOTER_VIEW_TYPE) {
+            mFooterAdapter.onBindFooter(holder);
+        }
+        else if (mViewTypes[position] == SECTION_VIEW_TYPE) {
+            mCursor.moveToPosition(position - sectionOffsetForPosition(position));
+            mSectionAdapter.onBindSectionViewHolder(holder, mCursor);
+        }
+        else {
+            throw new IllegalStateException("No view type found for position " + position);
+        }
     }
 
-    public void enableFooter() {
-        mDisplayFooter = true;
+    public void enableFooter(FooterAdapter<VH> footerAdapter) {
+        mFooterAdapter = footerAdapter;
+    }
+
+    public void enableSections(SectionAdapter<VH> sectionAdapter) {
+        mSectionAdapter = sectionAdapter;
     }
 
     public void changeCursor(Cursor cursor) {
@@ -132,6 +145,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
 
         mCursor = newCursor;
         if (mCursor != null) {
+            if (mSectionAdapter != null)
+                setUpSections();
+
             mCursor.registerDataSetObserver(mDataSetObserver);
 
             mRowIdColumn = newCursor.getColumnIndex(TableBuilder.ID);
@@ -146,12 +162,54 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
         return oldCursor;
     }
 
-    public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
+    private void setUpSections() {
+        List<SimpleDate> dates = new ArrayList<>();
+        List<Integer> section = new ArrayList<>();
 
-    /**
-     * Override this method if you want to put something in the footer
-     */
-    public void onBindFooter(VH viewHolder) {}
+        if (mCursor.moveToFirst()) {
+            dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
+
+            while (mCursor.moveToNext()) {
+                dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
+            }
+        }
+
+        int sections = 0;
+        for (int i = 0; i < dates.size(); i++) {
+            if (i == 0) {
+                section.add(i + sections);
+                sections++;
+            } else if (dates.get(i).month > dates.get(i -1).month) {
+                section.add(i + sections);
+                sections++;
+            }
+        }
+
+        mViewTypes = new int[dates.size() + section.size() + (mFooterAdapter != null ? FOOTER_COUNT : 0)];
+
+        for (int i = 0; i < mViewTypes.length; i++) {
+            if (i == mViewTypes.length -1 && mFooterAdapter != null)
+                mViewTypes[i] = FOOTER_VIEW_TYPE;
+            else if (section.contains(i))
+                mViewTypes[i] = SECTION_VIEW_TYPE;
+            else
+                mViewTypes[i] = NORMAL_VIEW_TYPE;
+
+        }
+    }
+
+    private int sectionOffsetForPosition(int position) {
+        int sections = 0;
+
+        for (int i = 0; i < position; i++) {
+            if (mViewTypes[i] == SECTION_VIEW_TYPE)
+                sections++;
+        }
+
+        return sections;
+    }
+
+    public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
 
     private class NotifyingDataSetObserver extends DataSetObserver {
         @Override

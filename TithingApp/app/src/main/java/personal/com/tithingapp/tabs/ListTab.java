@@ -33,7 +33,8 @@ public abstract class ListTab extends TabFragment implements LoaderManager.Loade
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new  ListAdapter(getActivity(), null, this);
-        mAdapter.enableFooter();
+        mAdapter.enableFooter(mAdapter);
+        mAdapter.enableSections(mAdapter);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(mAdapter);
 
