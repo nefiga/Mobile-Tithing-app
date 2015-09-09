@@ -48,10 +48,12 @@ public abstract class CursorRecyclerViewAdapter<VH extends ViewHolder> extends R
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor != null) {
-            if (mDisplayFooter)
-                return mCursor.getCount() + FOOTER_COUNT;
+            int itemCount = mCursor.getCount();
 
-            return mCursor.getCount();
+            if (mDisplayFooter)
+                itemCount += FOOTER_COUNT;
+
+            return itemCount;
         }
 
         return NO_ITEMS;

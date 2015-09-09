@@ -47,6 +47,10 @@ public class ListAdapter extends CursorRecyclerViewAdapter<IncomeViewHolder> {
         return new IncomeViewHolder(itemView, null, null, null, null);
     }
 
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
 
 
     public class IncomeViewHolder extends ViewHolder {

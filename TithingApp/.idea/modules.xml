@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TithingApp.iml" filepath="$PROJECT_DIR$/TithingApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickprovider/quickprovider.iml" filepath="$PROJECT_DIR$/quickprovider/quickprovider.iml" />
     </modules>
   </component>
 </project>
