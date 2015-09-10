@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import personal.com.tithingapp.database.IncomeTable;
-import personal.com.tithingapp.utilities.Utils;
 import personal.com.tithingapp.utilities.SimpleDate;
+import personal.com.tithingapp.utilities.Utils;
 
 public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implements FooterAdapter<ViewHolder>, SectionAdapter<ViewHolder> {
 
@@ -26,7 +26,7 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
             IncomeViewHolder incomeViewHolder = (IncomeViewHolder) viewHolder;
 
             incomeViewHolder.mTitle.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
-            incomeViewHolder.mDate.setText(Utils.getDisplayDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
+            incomeViewHolder.mDate.setText(Utils.getDisplayDateFromPersistableDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
             incomeViewHolder.mAmount.setText(Utils.getDisplayableAmount(cursor.getInt(cursor.getColumnIndex(IncomeTable.AMOUNT))));
 
             String notes = cursor.getString(cursor.getColumnIndex(IncomeTable.NOTES));
@@ -47,43 +47,6 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
         EditText notes = (EditText) itemView.findViewById(R.id.notes);
 
         return new IncomeViewHolder(itemView, title, date, amount, notes);
-    }
-
-    @Override
-    public int[] getViewTypes(Cursor mCursor) {
-        int[] viewTypes;
-        List<SimpleDate> dates = new ArrayList<>();
-        List<Integer> section = new ArrayList<>();
-
-        if (mCursor.moveToFirst()) {
-            dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
-
-            while (mCursor.moveToNext()) {
-                dates.add(Utils.getSimpleDateFromPersistableDate(mCursor.getString(mCursor.getColumnIndex(IncomeTable.DATE))));
-            }
-        }
-
-        int sections = 0;
-        for (int i = 0; i < dates.size(); i++) {
-            if (i == 0) {
-                section.add(i + sections);
-                sections++;
-            } else if (dates.get(i).month > dates.get(i -1).month) {
-                section.add(i + sections);
-                sections++;
-            }
-        }
-
-        viewTypes = new int[dates.size() + section.size()];
-
-        for (int i = 0; i < viewTypes.length; i++) {
-            if (section.contains(i))
-                viewTypes[i] = SECTION_VIEW_TYPE;
-            else
-                viewTypes[i] = DEFAULT_VIEW_TYPE;
-        }
-
-        return viewTypes;
     }
 
     @Override
@@ -120,6 +83,34 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
 
             sectionViewHolder.mTitle.setText(simpleDate.getReadableMonth() + "  " + simpleDate.year);
         }
+    }
+
+    @Override
+    public List<Integer> getSectionPositions(Cursor cursor) {
+        List<SimpleDate> dates = new ArrayList<>();
+        List<Integer> sectionPositions = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            dates.add(Utils.getSimpleDateFromPersistableDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
+
+            while (cursor.moveToNext()) {
+                dates.add(Utils.getSimpleDateFromPersistableDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
+            }
+        }
+
+        for (int i = 0; i < dates.size(); i++) {
+            if (i == 0) {
+                sectionPositions.add(i);
+            } else {
+                SimpleDate oldDate = dates.get(i - 1);
+                SimpleDate newDate = dates.get(i);
+
+                if (newDate.year > oldDate.year || newDate.month > oldDate.month)
+                    sectionPositions.add(i);
+            }
+        }
+
+        return sectionPositions;
     }
 
     public class IncomeViewHolder extends ViewHolder {

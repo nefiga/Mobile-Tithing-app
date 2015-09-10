@@ -1,6 +1,7 @@
 package personal.com.tithingapp;
 
 import java.util.Arrays;
+import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,8 +12,8 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import com.verisage.quickprovider.Table;
 import personal.com.tithingapp.ListAdapter.OnListItemClickListener;
-import personal.com.tithingapp.database.TableBuilder;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> implements RecyclerView.OnItemTouchListener {
     private final int FOOTER_COUNT = 1;
@@ -41,7 +42,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     public CursorRecyclerViewAdapter(Context context, Cursor cursor, OnListItemClickListener clickListener) {
         mCursor = cursor;
         mDataValid = cursor != null;
-        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(TableBuilder.ID) : -1;
+        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(Table.ID) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
         mGestureDetector = new GestureDetector(context, new SimpleTouchListener());
         mClickListener = clickListener;
@@ -121,11 +122,22 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return position == mViewTypes.length && mFooterAdapter != null;
     }
 
-    public int[] getViewTypes(Cursor cursor) {
-        int[] viewTypes = new int[cursor.getCount()];
-        Arrays.fill(viewTypes, DEFAULT_VIEW_TYPE);
+    public void getViewTypes(Cursor cursor) {
+        if (mSectionAdapter != null) {
+            List<Integer> sectionPositions = mSectionAdapter.getSectionPositions(cursor);
 
-        return viewTypes;
+            mViewTypes = new int[cursor.getCount() + sectionPositions.size()];
+            Arrays.fill(mViewTypes, DEFAULT_VIEW_TYPE);
+
+            int sectionOffset = 0;
+            for (int i = 0; i < sectionPositions.size(); i++) {
+                mViewTypes[sectionPositions.get(i) + sectionOffset] = SECTION_VIEW_TYPE;
+                sectionOffset++;
+            }
+        } else {
+            mViewTypes = new int[cursor.getCount()];
+            Arrays.fill(mViewTypes, DEFAULT_VIEW_TYPE);
+        }
     }
 
     private int getSectionOffsetForPosition(int position) {
@@ -163,11 +175,11 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
         mCursor = newCursor;
         if (mCursor != null) {
-            mViewTypes = getViewTypes(mCursor);
+            getViewTypes(mCursor);
 
             mCursor.registerDataSetObserver(mDataSetObserver);
 
-            mRowIdColumn = newCursor.getColumnIndex(TableBuilder.ID);
+            mRowIdColumn = newCursor.getColumnIndex(Table.ID);
             mDataValid = true;
             notifyDataSetChanged();
         } else {

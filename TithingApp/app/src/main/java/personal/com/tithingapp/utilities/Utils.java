@@ -12,15 +12,15 @@ public class Utils {
     public static final int TITHING_INCOME_LOADER = 1;
 
     public static String getPersistableDate(int month, int day, int year) {
-        return String.format("%02d/%02d/%d", month, day, year);
+        return String.format("%02d/%02d/%d", year, month, day);
     }
 
-    public static String getDisplayDate(String date) {
+    public static String getDisplayDateFromPersistableDate(String date) {
         String[] dates = date.split(DATE_SEPARATOR);
 
-        int month = Integer.parseInt(dates[0]) + MONTH_OFFSET;
-        int day = Integer.parseInt(dates[1]);
-        int year  = Integer.parseInt(dates[2]);
+        int year  = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]) + MONTH_OFFSET;
+        int day = Integer.parseInt(dates[2]);
 
         return String.format("%02d/%02d/%d", month, day, year);
     }
@@ -28,9 +28,9 @@ public class Utils {
     public static SimpleDate getSimpleDateFromPersistableDate(String persistableDate) {
         String[] dates = persistableDate.split(DATE_SEPARATOR);
 
-        int month = Integer.parseInt(dates[0]);
-        int day = Integer.parseInt(dates[1]);
-        int year  = Integer.parseInt(dates[2]);
+        int year  = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
 
         return new SimpleDate(month, day, year);
     }
