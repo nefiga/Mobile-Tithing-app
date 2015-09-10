@@ -15,7 +15,7 @@ public class IncomeParcelTranslator {
         if (cursor.moveToFirst()) {
             incomeParcel.setID(cursor.getLong(cursor.getColumnIndex(IncomeTable.ID)));
             incomeParcel.setTitle(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
-            incomeParcel.setAmount(cursor.getFloat(cursor.getColumnIndex(IncomeTable.AMOUNT)));
+            incomeParcel.setAmount(cursor.getInt(cursor.getColumnIndex(IncomeTable.AMOUNT)));
             incomeParcel.setDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE)));
         }
         cursor.close();

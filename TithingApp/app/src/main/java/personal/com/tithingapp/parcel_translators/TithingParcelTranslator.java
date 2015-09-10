@@ -15,7 +15,7 @@ public class TithingParcelTranslator {
         if (cursor.moveToFirst()) {
             tithingParcel.setID(cursor.getLong(cursor.getColumnIndex(TithingTable.ID)));
             tithingParcel.setTitle(cursor.getString(cursor.getColumnIndex(TithingTable.TITLE)));
-            tithingParcel.setAmount(cursor.getFloat(cursor.getColumnIndex(TithingTable.AMOUNT)));
+            tithingParcel.setAmount(cursor.getInt(cursor.getColumnIndex(TithingTable.AMOUNT)));
             tithingParcel.setDate(cursor.getString(cursor.getColumnIndex(TithingTable.DATE)));
         }
         cursor.close();

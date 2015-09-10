@@ -61,19 +61,19 @@ public abstract class EditTab extends DataFragment implements OnDateSetListener 
 
     private void populateGUIFromParcel() {
         mTitle.setText(mDataParcel.getTitle());
-        mAmount.setText(Float.toString(mDataParcel.getAmount()));
+        mAmount.setText(Utils.getDisplayableAmount(mDataParcel.getAmount()));
         populateDateDialogWithDateFromParcel();
     }
 
     private void populateParcel() {
         mDataParcel.setTitle(mTitle.getText().toString());
-        mDataParcel.setAmount(Float.parseFloat(mAmount.getText().toString()));
+        mDataParcel.setAmount(Utils.getPersistableAmount(mAmount.getText().toString()));
 
         DatePicker datePicker = mDateDialog.getDatePicker();
         mDataParcel.setDate(Utils.getPersistableDate(datePicker.getMonth(), datePicker.getDayOfMonth(), datePicker.getYear()));
     }
 
-    private void save() {
+    protected void save() {
         if (validate()) {
             populateParcel();
 

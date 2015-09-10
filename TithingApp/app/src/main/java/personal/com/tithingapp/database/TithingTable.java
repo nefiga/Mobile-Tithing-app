@@ -1,14 +1,19 @@
 package personal.com.tithingapp.database;
 
-public class TithingTable extends TableBuilder {
-    public static final String TABLE_NAME = begin("tithing");
+import com.verisage.quickprovider.Table;
+import com.verisage.quickprovider.TableBuilder;
 
-    public static final String TITLE = appendText("title");
-    public static final String DATE = appendText("date");
-    public static final String NOTES = appendText("notes");
-    public static final String AMOUNT = end("amount", DB_FLOAT);
+public class TithingTable implements Table {
+    private static TableBuilder mTableBuider = TableBuilder.getInstance();
 
-    public static final String CREATE = retrieveCreateString();
+    public static final String TABLE_NAME = mTableBuider.open("tithing");
 
-    public static final String[] ALL_COLUMNS = retrieveAllColumnsArray();
+    public static final String TITLE = mTableBuider.appendText("title");
+    public static final String DATE = mTableBuider.appendText("date");
+    public static final String NOTES = mTableBuider.appendText("notes");
+    public static final String AMOUNT = mTableBuider.appendInt("amount");
+
+    public static final String CREATE = mTableBuider.retrieveCreateString();
+
+    public static final String[] ALL_COLUMNS = mTableBuider.retrieveAllColumnsArray();
 }

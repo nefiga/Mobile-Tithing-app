@@ -12,6 +12,7 @@ public class Provider extends QuickProvider {
 
     public static final Uri INCOME_CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, IncomeTable.TABLE_NAME);
     public static final Uri TITHING_CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TithingTable.TABLE_NAME);
+    public static final Uri OWED_TITHING_URI = Uri.withAppendedPath(AUTHORITY_URI, OwedTithingTable.TABLE_NAME);
 
     @Override
     public boolean onCreate() {
@@ -19,6 +20,7 @@ public class Provider extends QuickProvider {
 
         addToUriMatcher(AUTHORITY, IncomeTable.TABLE_NAME);
         addToUriMatcher(AUTHORITY, TithingTable.TABLE_NAME);
+        addToUriMatcher(AUTHORITY, OwedTithingTable.TABLE_NAME);
 
         return true;
     }

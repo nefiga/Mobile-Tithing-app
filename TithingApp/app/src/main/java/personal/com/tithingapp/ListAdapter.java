@@ -27,7 +27,7 @@ public class ListAdapter extends CursorRecyclerViewAdapter<ViewHolder> implement
 
             incomeViewHolder.mTitle.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.TITLE)));
             incomeViewHolder.mDate.setText(Utils.getDisplayDate(cursor.getString(cursor.getColumnIndex(IncomeTable.DATE))));
-            incomeViewHolder.mAmount.setText(cursor.getString(cursor.getColumnIndex(IncomeTable.AMOUNT)));
+            incomeViewHolder.mAmount.setText(Utils.getDisplayableAmount(cursor.getInt(cursor.getColumnIndex(IncomeTable.AMOUNT))));
 
             String notes = cursor.getString(cursor.getColumnIndex(IncomeTable.NOTES));
             if (notes != null)

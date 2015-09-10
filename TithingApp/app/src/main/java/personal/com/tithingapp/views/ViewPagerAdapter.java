@@ -1,12 +1,11 @@
 package personal.com.tithingapp.views;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import personal.com.tithingapp.tabs.TabFragment;
 import personal.com.tithingapp.tabs.TabFragment.ChangeTabListener;
 

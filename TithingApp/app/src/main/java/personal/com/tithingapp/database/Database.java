@@ -17,6 +17,7 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(IncomeTable.CREATE);
         sqLiteDatabase.execSQL(TithingTable.CREATE);
+        sqLiteDatabase.execSQL(OwedTithingTable.CREATE);
     }
 
     @Override

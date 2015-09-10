@@ -9,7 +9,7 @@ public abstract class DataParcel implements Persistable {
 
     protected Long mID = Utils.EMPTY_LONG;
     protected String mTitle;
-    protected float mAmount;
+    protected int mAmount;
     protected String mDate;
 
     public DataParcel() {
@@ -24,7 +24,7 @@ public abstract class DataParcel implements Persistable {
         mTitle = title;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(int amount) {
         mAmount = amount;
     }
 
@@ -40,7 +40,7 @@ public abstract class DataParcel implements Persistable {
         return mTitle;
     }
 
-    public float getAmount() {
+    public int getAmount() {
         return mAmount;
     }
 
@@ -65,14 +65,14 @@ public abstract class DataParcel implements Persistable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mID);
         dest.writeString(mTitle);
-        dest.writeFloat(mAmount);
+        dest.writeInt(mAmount);
         dest.writeString(mDate);
     }
 
     private void readFromParcel(Parcel parcel) {
         mID = parcel.readLong();
         mTitle = parcel.readString();
-        mAmount = parcel.readFloat();
+        mAmount = parcel.readInt();
         mDate = parcel.readString();
     }
 }

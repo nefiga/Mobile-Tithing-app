@@ -25,16 +25,18 @@ public class PersisterService extends Service {
         if (extras.containsKey(Persistable.NAME)) {
             Persistable persistable = extras.getParcelable(Persistable.NAME);
 
-            switch (intent.getAction()) {
-                case Persistable.ACTION_SAVE:
-                    persistable.save(this);
-                    break;
-                case Persistable.ACTION_UPDATE:
-                    persistable.update(this);
-                    break;
-                case Persistable.ACTION_DELETE:
-                    persistable.delete(this);
-                    break;
+            if (persistable != null) {
+                switch (intent.getAction()) {
+                    case Persistable.ACTION_SAVE:
+                        persistable.save(this);
+                        break;
+                    case Persistable.ACTION_UPDATE:
+                        persistable.update(this);
+                        break;
+                    case Persistable.ACTION_DELETE:
+                        persistable.delete(this);
+                        break;
+                }
             }
         }
 

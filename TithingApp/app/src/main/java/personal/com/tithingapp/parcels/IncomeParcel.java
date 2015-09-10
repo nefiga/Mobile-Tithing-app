@@ -6,9 +6,6 @@ import android.os.Parcel;
 import personal.com.tithingapp.database.IncomeTable;
 import personal.com.tithingapp.database.Provider;
 
-/**
- * Created by ryant on 8/2/15.
- */
 public class IncomeParcel extends DataParcel {
 
     public IncomeParcel() {
