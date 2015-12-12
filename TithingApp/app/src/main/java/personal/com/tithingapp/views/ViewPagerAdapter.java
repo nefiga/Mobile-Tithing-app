@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import personal.com.tithingapp.tabs.TabFragment;
 import personal.com.tithingapp.tabs.TabFragment.ChangeTabListener;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter implements ChangeTabListener{
+public class ViewPagerAdapter extends FragmentStatePagerAdapter implements ChangeTabListener {
     private FragmentManager mFragmentManager;
 
     private List<TabFragment> mFragments = new ArrayList<>();

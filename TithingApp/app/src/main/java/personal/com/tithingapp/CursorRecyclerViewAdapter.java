@@ -122,11 +122,11 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return position == mViewTypes.length && mFooterAdapter != null;
     }
 
-    public void getViewTypes(Cursor cursor) {
+    public void setViewTypes() {
         if (mSectionAdapter != null) {
-            List<Integer> sectionPositions = mSectionAdapter.getSectionPositions(cursor);
+            List<Integer> sectionPositions = mSectionAdapter.getSectionPositions(mCursor);
 
-            mViewTypes = new int[cursor.getCount() + sectionPositions.size()];
+            mViewTypes = new int[mCursor.getCount() + sectionPositions.size()];
             Arrays.fill(mViewTypes, DEFAULT_VIEW_TYPE);
 
             int sectionOffset = 0;
@@ -135,7 +135,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
                 sectionOffset++;
             }
         } else {
-            mViewTypes = new int[cursor.getCount()];
+            mViewTypes = new int[mCursor.getCount()];
             Arrays.fill(mViewTypes, DEFAULT_VIEW_TYPE);
         }
     }
@@ -175,7 +175,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
         mCursor = newCursor;
         if (mCursor != null) {
-            getViewTypes(mCursor);
+            setViewTypes();
 
             mCursor.registerDataSetObserver(mDataSetObserver);
 

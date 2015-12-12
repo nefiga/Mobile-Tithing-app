@@ -24,4 +24,30 @@
         android:layout_weight="1"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="@dimen/margin_tiny"
+        android:background="@color/color_primary_light"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/large_text"
+            android:text="Tithing Due:"/>
+
+        <TextView
+            android:id="@+id/owed_tithing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
+            android:textSize="@dimen/large_text"
+            tools:text="$1245.10"/>
+
+    </LinearLayout>
+
 </LinearLayout>
